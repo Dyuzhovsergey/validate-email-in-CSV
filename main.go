@@ -34,18 +34,13 @@ func createCSV(path string) (*csv.Writer, *os.File) {
 	return writer, file
 }
 
-unc validateEmail(email string) bool {
-    email = strings.TrimSpace(email)
-    if email == "" {
-        return false 
-    }
-    
-    _, err := mail.ParseAddress(email)
-    if err != nil {
-        return false
-    }
-    
-    return true
+func validateEmail(email string) bool {
+	email = strings.TrimSpace(email)
+	if email == "" {
+		return false
+	}
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
 
 func worker(jobs <-chan Job, results chan<- []string, emailIdx int, wg *sync.WaitGroup) {

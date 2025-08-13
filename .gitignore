@@ -1,2 +1,4 @@
 *.csv
+!input.csv
+
 task.txt
