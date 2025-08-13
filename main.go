@@ -34,13 +34,20 @@ func createCSV(path string) (*csv.Writer, *os.File) {
 	return writer, file
 }
 
-func validateEmail(email string) bool {
-	email = strings.TrimSpace(email)
-	_, err := mail.ParseAddress(email)
-	return err == nil
+unc validateEmail(email string) bool {
+    email = strings.TrimSpace(email)
+    if email == "" {
+        return false 
+    }
+    
+    _, err := mail.ParseAddress(email)
+    if err != nil {
+        return false
+    }
+    
+    return true
 }
 
-// worker — валидирует email и отправляет результат в results
 func worker(jobs <-chan Job, results chan<- []string, emailIdx int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for job := range jobs {
@@ -70,7 +77,7 @@ func main() {
 		log.Fatalf("Error read header: %v", err)
 	}
 
-	// находим индекс колонки email
+	// find email index
 	emailIdx := -1
 	for i, h := range header {
 		if strings.ToLower(strings.TrimSpace(h)) == "email" {
